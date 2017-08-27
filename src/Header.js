@@ -1,4 +1,5 @@
 import React from 'react';
+import ClassNames from 'classnames';
 
 class Header extends React.Component {
 
@@ -25,10 +26,18 @@ class Header extends React.Component {
                     placeholder="What needs to be done?"
                     onKeyDown={this.handleKeyDown}
                 />
-                <button
+
+                {/*<button
                     className={`toggle-all${isAllDone ? ' checked' : ''}`}
                     onClick = {toggleAll}
+                /> */}
+                <button
+                    className={ClassNames('toggle-all', {
+                        checked: isAllDone
+                    })}
+                    onClick = {toggleAll}
                 />
+
             </header>
         );
     }

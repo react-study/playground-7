@@ -8,20 +8,29 @@ class App extends React.Component {
 
   state = {
       todos : [{
-          text: '배고파',
+          text: '배고파1',
           isDone: false,
           id: 1111
       },{
-          text: '배고파',
-          isDone: true,
+          text: '배고파2',
+          isDone: false,
           id: 2222
       },{
-          text: '배고파',
-          isDone: false,
+          text: '배고파3',
+          isDone: true,
           id: 3333
+      },{
+          text: '배고파4',
+          isDone: false,
+          id: 4444
+      },{
+          text: '배고파5',
+          isDone: true,
+          id: 5555
       }],
-      
-      editingId: null
+
+      editingId: null,
+      selectedFilter: 'All'
   };
 
     addTodo = text => {
@@ -100,11 +109,34 @@ class App extends React.Component {
         });
     }
 
+    changeFilter = filter => {
+        this.setState({
+            selectedFilter: filter
+        });
+    }
+
     render() {
         const {
             todos,
-            editingId
+            editingId,
+            selectedFilter
         } = this.state;
+
+        const completedLength = todos.filter(v => v.isDone).length;
+        const activeLength = todos.length - completedLength;
+
+        let filteredTodos;
+        switch(selectedFilter){
+            case 'Active':
+                filteredTodos = todos.filter(v => !v.isDone);
+                break;
+            case 'Completed':
+                filteredTodos = todos.filter(v => v.isDone);
+                break;
+            case 'All':
+            default:
+                filteredTodos = todos;
+        }
 
         return (
             <div className="todo-app">
@@ -114,7 +146,7 @@ class App extends React.Component {
                     isAllDone = {todos.every(v => v.isDone)} //flag 하나 헤더에게 넘겨줌
                 />
                 <TodoList
-                    todos={todos}
+                    todos={filteredTodos}
                     deleteTodo={this.deleteTodo}
                     startEdit = {this.startEdit}
                     editingId = {editingId}
@@ -123,7 +155,11 @@ class App extends React.Component {
                     toggleTodo = {this.toggleTodo}
                 />
                 <Footer
+                    activeLength = {activeLength}
+                    shouldCompletedBtnHidden = {!completedLength}
                     clearCompleted = {this.clearCompleted}
+                    selectedFilter = {selectedFilter}
+                    changeFilter = {this.changeFilter}
                 />
             </div>
         );

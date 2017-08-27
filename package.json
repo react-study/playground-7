@@ -23,5 +23,8 @@
     "webpack-dev-server": "^2.5.1",
     "webpack-hot-middleware": "^2.18.2",
     "react-hot-loader": "next"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
   }
 }

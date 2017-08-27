@@ -1,4 +1,5 @@
 import React from 'react';
+import ClassNames from 'classnames';
 
 class Todo extends React.Component {
 
@@ -32,12 +33,17 @@ class Todo extends React.Component {
         } = this.props;
 
         return(
+
+            <li className={ClassNames('todo-item', {
+                editing: isEditing,
+                completed: isDone
+            })}>
+            {/*
             <li className={[
                 'todo-item',
                 isEditing ? ' editing' : '',
                 isDone ? ' completed' : ''
             ].join('')}>
-            {/*
             <li className={`todo-item${isEditing ? ' editing' : ''}${isDone ? ' completed' : ''}`}>
             */}
                 <button
