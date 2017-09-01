@@ -19,9 +19,12 @@
     "babel-preset-stage-1": "^6.24.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-hot-loader": "next",
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.5.1",
-    "webpack-hot-middleware": "^2.18.2",
-    "react-hot-loader": "next"
+    "webpack-hot-middleware": "^2.18.2"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
   }
 }
