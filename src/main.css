@@ -370,3 +370,14 @@ label[for='toggle-all'] {
     bottom: 10px;
   }
 }
+
+
+/* homework */
+.account-app { width:510px;margin:30px auto;padding:5px;background:#fff; }
+.account-app__insert { width:330px;height:50px;border:1px solid #eee;font-size:15px;text-indent:10px;vertical-align:middle; }
+.account-app__plus,
+.account-app__minus { display:inline-block;height:50px;width:80px;border:1px solid #eee;margin-left:5px;vertical-align:middle; }
+.account-app__main { margin-top:5px; }
+.account-list { table-layout:fixed;width:100%;border-collapse:collapse; }
+.account-list th,
+.account-list td { width:33.3%;height:30px;border:1px solid #eee;font-weight:200;text-align:center; }
