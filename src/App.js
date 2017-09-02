@@ -4,50 +4,64 @@ import Header from './Header';
 import TodoList from './TodoList';
 import Footer from './Footer';
 
+import axios from 'axios'; // axios도 인스턴스
+
+const ax = axios.create({
+    // process.env === 'production' ? 'http://naver.com/todos' : 'http://localhost:2403/todos';
+    baseURL: 'http://localhost:2403/todos',
+    timeout: 1000 // 1초가 지나면 에러로 간주
+});
+
 class App extends React.Component {
 
-  state = {
-      todos : [{
-          text: '배고파1',
-          isDone: false,
-          id: 1111
-      },{
-          text: '배고파2',
-          isDone: false,
-          id: 2222
-      },{
-          text: '배고파3',
-          isDone: true,
-          id: 3333
-      },{
-          text: '배고파4',
-          isDone: false,
-          id: 4444
-      },{
-          text: '배고파5',
-          isDone: true,
-          id: 5555
-      }],
+    constructor(){
+        super();
+        this.state = {
+            todos : [],
+            editingId: null,
+            selectedFilter: 'All'
+        };
 
-      editingId: null,
-      selectedFilter: 'All'
-  };
-
-    addTodo = text => {
-        this.setState({
-            todos: [... this.state.todos, {
-                text,
-                id: Date.now()
-            }]
+        // 전체 데이터 가져오기
+        //axios.get('http://localhost:2403/todos')
+        ax.get('/')
+        .then(res => {
+            //console.log(res);
+            this.setState({
+                todos: res.data
+            });
         });
     }
 
+    addTodo = text => {
+        // state를 바꿔주면 됐는데
+        // server 요청하고 -> res오면 -> 그제서야 반영
+        // server에서 에러가 나면 -> 화면에도 반영하지 말아야 합니다.
+
+        //axios.post('http://localhost:2403/todos', { text }) // text:text data short
+        ax.post('/', { text })
+        .then(res => {
+            console.log(res.data);
+            this.setState({
+                todos: [ ... this.state.todos, res.data]
+            });
+        })
+    }
+
     deleteTodo = id => {
-        const newTodos = [... this.state.todos];
-        const targetIndex = newTodos.findIndex( v => v.id ===id );
-        newTodos.splice(targetIndex, 1);
-        this.setState({
-            todos: newTodos
+        // 서버에서 return되는 값이 없다
+        // id 삭제 => 삭제 성공하면, 무얼 봔환해야 하지? 할게 없는 상황...
+        // 낙관적으로 믿고 따르는 수밖에...
+
+        //axios.delete(`http://localhost:2403/todos/${id}`)
+        ax.delete(`/${id}`)
+        .then(() => {
+            const newTodos = [... this.state.todos];
+            const targetIndex = newTodos.findIndex( v => v.id ===id );
+            newTodos.splice(targetIndex, 1);
+            this.setState({
+                todos: newTodos
+            });
         });
     }
 
@@ -58,17 +72,15 @@ class App extends React.Component {
     }
 
     saveTodo = (id, newText) => {
-        const newTodos = [... this.state.todos];
-        const targetIndex = newTodos.findIndex( v => v.id ===id );
-        // newTodos[targetIndex].text = newText;
-        // (X) state ㄴ내부를 직접 바꾸는 결과가 되므로 지양하자.
-        // state를 바꾸는게 된다 [] 안에 {} 참조
-        newTodos[targetIndex] = Object.assign({}, newTodos[targetIndex], {
-            text: newText
-        });
-        this.setState({
-            todos: newTodos,
-            editingId: null
+        ax.put(`/${id}`, {text: newText}) // 전체가 아니라 바꾸고 싶은 부분만
+        .then(res => {
+            const newTodos = [... this.state.todos];
+            const targetIndex = newTodos.findIndex( v => v.id ===id );
+            newTodos[targetIndex] = res.data;
+            this.setState({
+                todos: newTodos,
+                editingId: null
+            });
         });
     }
 
@@ -82,30 +94,70 @@ class App extends React.Component {
     toggleTodo = id => {
         const newTodos = [... this.state.todos];
         const targetIndex = newTodos.findIndex( v => v.id ===id );
-        newTodos[targetIndex] = Object.assign({}, newTodos[targetIndex], {
-            isDone: !newTodos[targetIndex].isDone
-        });
-        this.setState({
-            todos: newTodos
+        const newDone = !newTodos[targetIndex].isDone;
+
+        ax.put(`/${id}`, { isDone: newDone })
+        .then(res => {
+            newTodos.splice(targetIndex, 1, res.data);
+            //newTodos[targetIndex] = res.data;
+            this.setState({
+                todos: newTodos
+            });
         });
     }
 
     toggleAll = () => {
         const newDone = this.state.todos.some( v => !v.isDone);
-        const newTodos = this.state.todos.map( v => Object.assign({}, v, {
-            isDone : newDone
-        })); // map은 새로울 배열을 만드는 것
-        this.setState({
-            todos: newTodos
+        const axArray = this.state.todos.map( v =>
+            ax.put(`/${v.id}`, { isDone: newDone })
+        );
+        axios.all(axArray) // promise all과 같은 녀석 동작이 똑같이 됨
+        .then(res => {
+            //console.log(res);
+            this.setState({
+                todos: res.map(r => r.data)
+            });
         });
+
+        /* 하나씩 바뀜 나쁨
+        todos[0].isDone => newDone // res setState
+        todos[1].isDone => newDone // res setState
+        todos[2].isDone => newDone // res setState
+        res만 한데 묶어서 처리
+        request를 여러번 날리고 response는 기다렸다가 다 돌아오면 묶어서 처리
+
+        // ax.put => Promise instance
+        // 요청은 각자 하더라도, resㄴㄴ 한데 묶어서 처리해보자
+        Promise.all([promise, promise, promise])
+        .then(responses => {
+            responses === [res, res, res]
+        })
+        .catch(errors => {
+            errors === [err, err, err]
+        })
+
+        axios.all([ax.put(), ax.put(), ... ])
+        .then(data => {
+            data === [res, res, res]
+        })
+        .catch(errors => {
+            errors === [err, err, err]
+        })
+        */
     }
 
     clearCompleted = () => {
-        /* 완료된 애들은 지워라 === 완료되지 않은 애들은 남겨라 */
-        const newTodos = this.state.todos.filter( v => !v.isDone);
-        // 조건을 충족한 애들만으로 새로운 배열을 만들어줌
-        this.setState({
-            todos: newTodos
+        // bluebird, superagent, fetch
+        const axArray = this.state.todos
+            .filter(v => v.isDone)
+            .map(todos => ax.delete(`/${todos.id}`));
+
+        axios.all(axArray)
+        .then(() => {
+            const newTodos = this.state.todos.filter(v => !v.isDone);
+            this.setState({
+                todos: newTodos
+            });
         });
     }
 
