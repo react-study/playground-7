@@ -2,36 +2,28 @@ import React from 'react';
 import ClassNames from 'classnames';
 
 class Header extends React.Component {
-    handleKeyDown = e => {
-        const text = e.target.value;
-        if(!text || e.keyCode !== 13) {
-            return;
-        }
-        this.props.addTodo(text);
-        e.target.value = '';
+
+    handleClick = (sign) => {
+        const cash = this._input.value;
+        this.props.addCashList(cash,sign);
+        this._input.value = '';
     }
 
+
     render() {
-        const {
-            isAllDone,
-            toggleAll
-        } = this.props;
         return (
-            <header>
-                <h1 className="todo-app__header">todos</h1>
+            <div>
+                <h1 className="cashbook_title">Cashbook</h1>
                 <input
                     type="text"
-                    className="todo-app__new-todo"
-                    placeholder="What needs to be done?"
-                    onKeyDown={this.handleKeyDown}
+                    className="input_cash"
+                    placeholder="금액입력"
+                    ref={ref=>{this._input=ref}}
                 />
-                <button
-                    className={ClassNames('toggle-all', {
-                        checked: isAllDone
-                    })}
-                    onClick={toggleAll}
-                />
-            </header>
+                <button className='button_action' onClick={()=>this.handleClick('+')}>입금</button> 
+                <button className='button_action' onClick={()=>this.handleClick('-')}>출금</button>
+                
+            </div>
         );
     }
 }

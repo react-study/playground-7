@@ -1,157 +1,62 @@
 import React from 'react';
+import Header from 'Header';
+import Cashlist from 'Cashlist';
+import axios from 'axios';
 
-import Header from './Header';
-import TodoList from './TodoList';
-import Footer from './Footer';
 
 class App extends React.Component {
-    state = {
-        todos: [{
-            text: '배고파',
-            isDone: false,
-            id: 11111
-        }, {
-            text: '밥먹자',
-            isDone: true,
-            id: 22222
-        }, {
-            text: '치킨에 맥주',
-            isDone: false,
-            id: 12345
-        }, {
-            text: '삼겹살에 쏘주',
-            isDone: false,
-            id: 123567
-        }],
-        editingId: null,
-        selectedFilter: 'All'
-    };
-
-    addTodo = text => {
-        this.setState({
-            todos: [...this.state.todos, {
-                text,
-                id: Date.now()
-            }]
-        });
+    constructor() {
+        super();
+        this.state = {
+            cashlists : [
+                {income: 0,
+                outcome: 0,
+                total:0}
+            ],
+            temptotal:0
+        };
+        
     }
 
-    deleteTodo = id => {
-        const newTodos = [...this.state.todos];
-        const targetIndex = newTodos.findIndex(v => v.id === id);
-        newTodos.splice(targetIndex, 1);
+    addCashList = (cash,sign) => {
+        let gettemptotal;
+        if(sign==='+'){ gettemptotal = parseInt(this.state.temptotal) + parseInt(cash)}
+            else{gettemptotal = parseInt(this.state.temptotal) - parseInt(cash)};
+        console.log(this.state.temptotal);
         this.setState({
-            todos: newTodos
-        });
-    }
-
-    startEdit = id => {
-        this.setState({
-            editingId: id
-        });
-    }
-
-    saveTodo = (id, newText) => {
-        const newTodos = [...this.state.todos];
-        const targetIndex = newTodos.findIndex(v => v.id === id);
-
-        // newTodos[targetIndex].text = newText;
-        // => (X) state 내부를 직접 바꾸는 결과가 되므로 지양하자.
-        newTodos[targetIndex] = Object.assign({}, newTodos[targetIndex], {
-            text: newText
-        });
-        this.setState({
-            todos: newTodos,
-            editingId: null
-        });
-    }
-
-    cancelEdit = () => {
-        this.setState({
-            editingId: null
-        });
-    }
-
-    toggleTodo = id => {
-        const newTodos = [...this.state.todos];
-        const targetIndex = newTodos.findIndex(v => v.id === id);
-        newTodos[targetIndex] = Object.assign({}, newTodos[targetIndex], {
-            isDone: !newTodos[targetIndex].isDone
-        });
-        this.setState({
-            todos: newTodos
-        });
-    }
-
-    toggleAll = () => {
-        const newDone = this.state.todos.some(v => !v.isDone);
-        const newTodos = this.state.todos.map(v => Object.assign({}, v, {
-            isDone: newDone
-        }));
-        this.setState({
-            todos: newTodos
-        });
-    }
-
-    clearCompleted = () => {
-        const newTodos = this.state.todos.filter(v => !v.isDone);
-        this.setState({
-            todos: newTodos
-        });
-    }
-
-    changeFilter = filter => {
-        this.setState({
-            selectedFilter: filter
+            cashlists: [...this.state.cashlists, {
+                income: (sign==='+'?cash:0),
+                outcome: (sign==='-'?cash:0),
+                id: Date.now(),
+                total : gettemptotal
+            }], temptotal:gettemptotal
         });
     }
 
     render() {
         const {
-            todos,
-            editingId,
-            selectedFilter
+            cashlists,
+            temptotal,
+            total
         } = this.state;
 
-        const completedLength = todos.filter(v =>v.isDone).length;
-        const activeLength = todos.length - completedLength;
-
-        let filteredTodos;
-        switch(selectedFilter) {
-            case 'Active':
-                filteredTodos = todos.filter(v => !v.isDone);
-                break;
-            case 'Completed':
-                filteredTodos = todos.filter(v => v.isDone);
-                break;
-            case 'All':
-            default:
-                filteredTodos = todos;
-        }
-
         return (
-            <div className="todo-app">
+            <div className="cashbook">
                 <Header
-                    addTodo={this.addTodo}
-                    toggleAll={this.toggleAll}
-                    isAllDone={todos.every(v => v.isDone)}
+                    addCashList={this.addCashList}
                 />
-                <TodoList
-                    todos={filteredTodos}
-                    deleteTodo={this.deleteTodo}
-                    startEdit={this.startEdit}
-                    editingId={editingId}
-                    saveTodo={this.saveTodo}
-                    cancelEdit={this.cancelEdit}
-                    toggleTodo={this.toggleTodo}
+                <table className="cashbook_table">
+                <thead>
+                    <tr>
+                        <th>입금</th>
+                        <th>출금</th>
+                        <th>잔액</th>
+                    </tr>
+                </thead>
+                <Cashlist
+                    cashlists={cashlists}
                 />
-                <Footer
-                    activeLength={activeLength}
-                    shouldCompletedBtnHidden={!completedLength}
-                    clearCompleted={this.clearCompleted}
-                    selectedFilter={selectedFilter}
-                    changeFilter={this.changeFilter}
-                />
+                </table>
             </div>
         );
     }
