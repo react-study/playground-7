@@ -26,6 +26,7 @@ class Header extends React.Component {
 //4번 방법 사용해서 this binding
     handleKeyDown = e => {
         const text = e.target.value;
+
         if (!text || e.keyCode !== 13) {
             return;
         }
