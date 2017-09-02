@@ -4,46 +4,56 @@ import Header from './Header';
 import TodoList from './TodoList';
 import Footer from './Footer';
 
-class App extends React.Component {
-    state = {
-        todos : [
-            {
-                text: '배고파',
-                isDone: false,
-                id: 11111
-            }, {
-                text: '밥먹자',
-                isDone: true,
-                id: 22222
-            }, {
-                text: '치킨에 맥주',
-                isDone: false,
-                id: 12345
-            }, {
-                text: '삼겹살에 쏘주',
-                isDone: false,
-                id: 123567
-            }
-        ],
-        editingId: null,
-        selectedFilter: 'All'
-    };
+import axios from 'axios';
 
-    addTodo = text => {
-        this.setState({
-            todos: [...this.state.todos, {
-                text,
-                id: Date.now()
-            }]
+//axios 상속 인스턴스 (서버URL 지정)
+const ax = axios.create({
+    baseURL: 'http://localhost:2403/todos',
+    timeout: 1000
+});
+
+class App extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            todos : [],
+            editingId: null,
+            selectedFilter: 'All'
+        }
+        ax.get('/')
+        .then( res => {
+            this.setState({
+                todos: res.data
+            });
         });
     }
 
+    addTodo = text => {
+        ax.post('/', { text })
+        .then(res => {
+            this.setState({
+                todos: [... this.state.todos, res.data]
+            });
+        });
+
+        // this.setState({
+        //     todos: [...this.state.todos, {
+        //         text,
+        //         id: Date.now()
+        //     }]
+        // });
+    }
+
     deleteTodo = id => {
-        const newTodos = [...this.state.todos];
-        const targetIndex = newTodos.findIndex(v => v.id === id);
-        newTodos.splice(targetIndex, 1);
-        this.setState({
-            todos: newTodos
+        ax.delete(`/${id}`)
+        .then( () => {
+            //기존 소스
+            const newTodos = [...this.state.todos];
+            const targetIndex = newTodos.findIndex(v => v.id === id);
+            newTodos.splice(targetIndex, 1);
+            this.setState({
+                todos: newTodos
+            });
         });
     }
 
@@ -54,14 +64,16 @@ class App extends React.Component {
     }
 
     saveTodo = (id, newText) => {
-        const newTodos = [...this.state.todos];
-        const targetIndex = newTodos.findIndex(v => v.id === id);
-        newTodos[targetIndex] = Object.assign({},newTodos[targetIndex], {
-            text: newText
-        });
-        this.setState({
-            todos: newTodos,
-            editingId: null
+        ax.put(`/${id}`,{text:newText})
+        .then(res => {
+            const newTodos = [...this.state.todos];
+            const targetIndex = newTodos.findIndex(v => v.id === id);
+            newTodos[targetIndex] = res.data; //덮어 씌움
+
+            this.setState({
+                todos: newTodos,
+                editingId: null
+            });
         });
     }
 
@@ -74,26 +86,52 @@ class App extends React.Component {
     toggleTodo = id => {
         const newTodos = [...this.state.todos];
         const targetIndex = newTodos.findIndex(v => v.id === id);
-        newTodos[targetIndex] = Object.assign({},newTodos[targetIndex], {
-            isDone: !newTodos[targetIndex].isDone
+        const newDone = !newTodos[targetIndex].isDone;
+
+        ax.put(`/${id}`,{isDone: newDone})
+        .then(res=> {
+            newTodos.splice(targetIndex, 1, res.data); // == newTodos[targetIndex] = res.data
+            this.setState({
+                todos: newTodos
+            });
         });
-        this.setState({
-            todos: newTodos
-        });
+
+        // newTodos[targetIndex] = Object.assign({},newTodos[targetIndex], {
+        //     isDone: !newTodos[targetIndex].isDone
+        // });
+        // this.setState({
+        //     todos: newTodos
+        // });
     }
 
     toggleAll = () => {
         const newDone = this.state.todos.some( v => !v.isDone );
-        const newTodos = this.state.todos.map( v=> Object.assign({}, v, {isDone: newDone}) );
-        this.setState({
-            todos: newTodos
+        const axArray = this.state.todos.map( v=> ax.put(`/${v.id}`, {isDone: newDone}) );
+
+        axios.all(axArray)
+        .then(res => {
+            this.setState({
+                todos: res.map(r => r.data)
+            });
         });
+
+        // const newTodos = this.state.todos.map( v=> Object.assign({}, v, {isDone: newDone}) );
+        // this.setState({
+        //     todos: newTodos
+        // });
     }
 
     clearCompleted = () => {
-        const newTodos = this.state.todos.filter( v => !v.isDone );
-        this.setState({
-            todos: newTodos
+        const axArray = this.state.todos
+            .filter(v=>v.isDone)
+            .map(todo => ax.delete(`/${todo.id}`)); //DB요청
+
+        axios.all(axArray)
+        .then(res => { //DB요청 완료후 로컬 화면 처리
+            const newTodos = this.state.todos.filter( v => !v.isDone );
+            this.setState({
+                todos: newTodos
+            });
         });
     }
 

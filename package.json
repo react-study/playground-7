@@ -25,6 +25,7 @@
     "react-hot-loader": "next"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "classnames": "^2.2.5"
   }
 }
