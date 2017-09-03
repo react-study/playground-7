@@ -375,5 +375,6 @@ label[for='toggle-all'] {
 .input_cash{border:1px solid #666;border-radius:3px;padding:0 5px;font-size:14px;line-height:24px;}
 .cashbook_table{width:270px;table-layout:fixed;margin-top:10px;border-top:1px solid #666;border-left:1px solid #666;border-collapse:collapse;}
 .cashbook_table th, .cashbook_table td{border-bottom:1px solid #666;border-right:1px solid #666;height:20px;line-height:20px;text-align:center;}
+.cashbook_table td{text-align:right;padding-right:10px}
 .cashbook_table .minus{color:red}
 .cashbook_table .plus{color:blue}
