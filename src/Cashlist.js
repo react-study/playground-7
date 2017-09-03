@@ -2,7 +2,7 @@ import React from 'react';
 
 class Cashlist extends React.Component {
 
-    render() {
+    render() { 
         const {
             cashlists
         } = this.props;// destructuring 을 사용하자!!

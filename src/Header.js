@@ -7,7 +7,7 @@ class Header extends React.Component {
         const cash = parseInt(this._input.value);
         this.props.addCashList(cash,sign);
         this._input.value = '';
-    }
+    } 
 
 
     render() {
