@@ -2,10 +2,10 @@ import React from 'react';
 
 class Cashlist extends React.Component {
 
-    render() { 
+    render() {
         const {
             cashlists
-        } = this.props;// destructuring 을 사용하자!!
+        } = this.props;
 
 
         return (
@@ -14,7 +14,7 @@ class Cashlist extends React.Component {
                         <tr key={`cashlist#${v.id}`}>
                             <td>{v.income}</td>
                             <td>{v.outcome}</td>
-                            <td>{v.total}</td>
+                            <td className={v.total<0?'minus':'plus'}>{v.total}</td>
                         </tr>
                     ))}
                 </tbody>
