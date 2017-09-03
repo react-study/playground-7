@@ -1,43 +1,40 @@
 import React from 'react';
 import Header from 'Header';
 import Cashlist from 'Cashlist';
-import axios from 'axios';
-
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
             cashlists : [
-                {income: 0,
-                outcome: 0,
+                {income: null,
+                outcome: null,
                 total:0}
             ],
             temptotal:0
         };
-        
     }
 
     addCashList = (cash,sign) => {
         let gettemptotal;
-        if(sign==='+'){ gettemptotal = parseInt(this.state.temptotal) + parseInt(cash)}
-            else{gettemptotal = parseInt(this.state.temptotal) - parseInt(cash)};
-        console.log(this.state.temptotal);
+        if(sign==='+'){ gettemptotal = this.state.temptotal + cash}
+            else{gettemptotal = this.state.temptotal - cash};
+        
         this.setState({
             cashlists: [...this.state.cashlists, {
-                income: (sign==='+'?cash:0),
-                outcome: (sign==='-'?cash:0),
+                income: (sign==='+'?cash:null),
+                outcome: (sign==='-'?cash:null),
                 id: Date.now(),
                 total : gettemptotal
             }], temptotal:gettemptotal
         });
+
+        console.log(this.state.cashlists);
     }
 
     render() {
         const {
-            cashlists,
-            temptotal,
-            total
+            cashlists
         } = this.state;
 
         return (
