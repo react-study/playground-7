@@ -1,10 +1,10 @@
 import React from 'react';
-import ClassNames from 'classnames';
+import ClassNames from 'classnames'; 
 
 class Header extends React.Component {
 
     handleClick = (sign) => {
-        const cash = this._input.value;
+        const cash = parseInt(this._input.value);
         this.props.addCashList(cash,sign);
         this._input.value = '';
     }
