@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.0/react.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.0/react-dom.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/classnames/2.2.5/index.js"></script>
+	<style type="text/css">
+
+		table {
+		    border-collapse: collapse;
+		}
+
+		table, th, td {
+		    border: 1px solid black;
+		}	
+
+	</style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel"> 
+
+class Header extends React.Component {
+
+	memeyCount = e => {
+		// let key = $(e.target).attr("data-key");
+		// console.log(e.target.dataset)
+		const { key } = e.target.dataset;
+		let val = parseInt(($.trim(this.inp.value)) || 0);
+		this.props.moneyCheck(key, val)
+	}
+
+	render() {
+
+		const {
+			money,
+			moneyCheck
+		} = this.props;
+
+		return (
+			<thead>
+				<tr>
+					<td><input type="number" name="" id="" placeholder="금액을입력하세요" ref={ref => { this.inp = ref; }} /></td>
+					<td><button data-key="in" onClick={this.memeyCount}>입금</button></td>
+					<td><button data-key="out" onClick={this.memeyCount}>출금</button></td>					
+				</tr>
+				<tr>
+					<td>잔액</td>
+					<td>입금</td>
+					<td>출금</td>
+				</tr>				
+			</thead>
+		);
+	}
+}
+
+class MoneyList extends React.Component {
+	render() {
+		const {
+			money
+		} = this.props; 
+		return (
+			<tbody>
+				{money.map(row => (
+				<tr>
+					<td>{row.sum}</td>
+					<td>{row.in}</td>
+					<td>{row.out}</td>
+				</tr>
+				))}		
+			</tbody>
+		);
+	}
+}	
+
+class App extends React.Component {
+
+	constructor(props) {
+		super();
+	    this.state = {           
+			money: [],
+			total : 0
+		}
+		// 합계 초기화
+	    for (var i = 0; i < this.state.money.length; i++) {
+	        this.state.total = this.state.total + this.state.money[i].sum
+	    } 
+	}
+
+	// 입출금 체크
+	moneyCheck = (key, val) => {
+
+		let _money;     // const?????
+
+		if(key === 'in') {
+			this.state.total = this.state.total + val
+			_money= {in : val,	out: 0, sum: this.state.total }
+		} else if(key === 'out') { 
+			this.state.total = this.state.total - val
+			_money= {in : 0,	out: val,	sum: this.state.total }			
+		}
+
+		this.setState({
+			money: [...this.state.money, _money]
+		});
+	}
+
+	// 컴포넌트가 만들어지고 첫 렌더링을 다 마친 후 실행되는 메소드
+	componentDidMount() {
+		//this.moneyCheck("in", 2220);
+		//console.log(this);
+		//console.log(this.state.money)  
+		// const node = ReactDOM.findDOMNode(this); //  컴포넌트가 만들어진후 DOM 요소를 반환
+		// console.log(node);
+	}
+
+	render() {
+		
+		const {
+			money
+		} = this.state;
+
+		return (
+			<table>
+				<Header 
+					money={money} 
+					moneyCheck={this.moneyCheck}>
+				</Header>
+				<MoneyList money={money}></MoneyList>
+			</table>
+		);
+	 }
+ }
+
+ReactDOM.render(
+	<App />,
+	document.getElementById('root')
+);
+
+</script>
+</body>
+
+</html>
+
