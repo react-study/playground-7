@@ -33,7 +33,7 @@ class Header extends React.Component {
 		// console.log(e.target.dataset)
 		const { key } = e.target.dataset;
 		let val = parseInt(($.trim(this.inp.value)) || 0);
-		this.props.moneyCheck(key, val)
+		this.props.moneyCheck(key, val);
 	}
 
 	render() {
