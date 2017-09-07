@@ -49,18 +49,22 @@ button, input[type="checkbox"] {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #dfdfdf;
   text-align: right;;
 }
 .btn {
   display: inline-block;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #dfdfdf;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   padding: 10px;
-  background: #d9d9d9;
+  background: #dfdfdf;
   color: #fff;
+  font-weight: bold;
+}
+.btn:hover {
+  cursor: pointer;
 }
 .btn-blue {
   border: 1px solid #007bff;
@@ -91,22 +95,28 @@ th {
 }
 td {
   padding: 10px;
-  border-left: 1px solid #d9d9d9;
+  border-left: 1px solid #dfdfdf;
   text-align: center;
 }
 td:last-child {
-  border-right: 1px solid #d9d9d9;
+  border-right: 1px solid #dfdfdf;
 }
 tr {
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 1px solid #dfdfdf;
 }
 
 tr:last-child {
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 1px solid #dfdfdf;
 }
 tr:nth-of-type(odd) {
   background: rgba(0,0,0,.01);
 }
 tr:first-child {
   background: transparent;
+}
+.add {
+  color: #28a745;
+}
+.subtract {
+  color: #dc3545;
 }
