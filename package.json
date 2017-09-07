@@ -1,0 +1,31 @@
+{
+  "name": "react-todo",
+  "author": "gomugom",
+  "description": "React Todo App",
+  "license": "MIT",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-study/playground-4.git"
+  },
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.5.1",
+    "webpack-hot-middleware": "^2.18.2",
+    "react-hot-loader": "next"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "classnames": "^2.2.5"
+  }
+}
