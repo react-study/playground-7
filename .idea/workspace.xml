@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f4193fb-2b55-4b28-8100-f046a5d4786b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/todoApp/data/diagnostic.data/metrics.interim" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todoApp/data/WiredTiger.wt" afterPath="$PROJECT_DIR$/todoApp/data/WiredTiger.wt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todoApp/data/diagnostic.data/metrics.2017-09-02T01-41-27Z-00000" afterPath="$PROJECT_DIR$/todoApp/data/diagnostic.data/metrics.2017-09-02T01-41-27Z-00000" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todoApp/data/mongod.lock" afterPath="$PROJECT_DIR$/todoApp/data/mongod.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todoApp/data/sizeStorer.wt" afterPath="$PROJECT_DIR$/todoApp/data/sizeStorer.wt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.js" afterPath="$PROJECT_DIR$/src/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todoApp/data/WiredTiger.turtle" afterPath="$PROJECT_DIR$/todoApp/data/WiredTiger.turtle" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -298,12 +290,12 @@
       <workItem from="1503738346175" duration="1012000" />
       <workItem from="1504315211510" duration="6831000" />
       <workItem from="1504696209261" duration="2032000" />
-      <workItem from="1504700172702" duration="14650000" />
+      <workItem from="1504700172702" duration="14914000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50531000" />
+    <option name="totallyTimeSpent" value="50795000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="47" y="23" width="1393" height="877" extended-state="6" />
