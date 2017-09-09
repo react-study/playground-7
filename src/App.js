@@ -16,8 +16,7 @@ class App extends React.Component {
         super();
         this.state = {
             todos: [],
-            editingId: null, //수정이 진행되고있는 todo li 의 id
-            selectedFilter: 'All'
+            editingId: null //수정이 진행되고있는 todo li 의 id
         };
         ax.get('/')
             .then(res => {
@@ -197,28 +196,31 @@ class App extends React.Component {
             });
     };
 
-    changeFilter = filter => {
-        this.setState({
-            selectedFilter: filter
-        })
-    };
-
+    /*
+     changeFilter = filter => {
+     this.setState({
+     selectedFilter: filter
+     })
+     };
+     */
     render() {
         const {
             todos,
-            editingId,
-            selectedFilter
+            editingId
         } = this.state;
+
+        const {match : {params}} = this.props;
+        const selectedFilter = params && params.filter || '';
 
         const completedLength = todos.filter(v => v.isDone).length;
         const activeLength = todos.length - completedLength;
 
         let filteredTodos = todos;
         switch (selectedFilter) {
-            case 'Active':
+            case 'active':
                 filteredTodos = todos.filter(v => !v.isDone);
                 break;
-            case 'Completed':
+            case 'completed':
                 filteredTodos = todos.filter(v => v.isDone);
                 break;
             default:
@@ -246,7 +248,6 @@ class App extends React.Component {
                     shouldCompletedBtnHidden={!completedLength}
                     clearCompleted={this.clearCompleted}
                     selectedFilter={selectedFilter}
-                    changeFilter={this.changeFilter}
                 />
             </div>
         );
