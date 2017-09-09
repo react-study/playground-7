@@ -18,8 +18,7 @@ class App extends React.Component {
         super();
         this.state = {
             todos : [],
-            editingId: null,
-            selectedFilter: 'All'
+            editingId: null
         };
 
         // 전체 데이터 가져오기
@@ -161,31 +160,27 @@ class App extends React.Component {
         });
     }
 
-    changeFilter = filter => {
-        this.setState({
-            selectedFilter: filter
-        });
-    }
-
     render() {
         const {
             todos,
-            editingId,
-            selectedFilter
+            editingId
         } = this.state;
+
+        const { match: { params }} = this.props;
+        const selectedFilter = params && params.filter || '';
 
         const completedLength = todos.filter(v => v.isDone).length;
         const activeLength = todos.length - completedLength;
 
         let filteredTodos;
         switch(selectedFilter){
-            case 'Active':
+            case 'active':
                 filteredTodos = todos.filter(v => !v.isDone);
                 break;
-            case 'Completed':
+            case 'completed':
                 filteredTodos = todos.filter(v => v.isDone);
                 break;
-            case 'All':
+            case '':
             default:
                 filteredTodos = todos;
         }
@@ -211,7 +206,6 @@ class App extends React.Component {
                     shouldCompletedBtnHidden = {!completedLength}
                     clearCompleted = {this.clearCompleted}
                     selectedFilter = {selectedFilter}
-                    changeFilter = {this.changeFilter}
                 />
             </div>
         );

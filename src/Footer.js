@@ -1,31 +1,31 @@
 import React from 'react';
 import ClassNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 class Footer extends React.Component {
-    _filterList = ['All', 'Active', 'Completed'];
+    _filterList = ['', 'active', 'completed'];
     render(){
         const {
             activeLength,
             shouldCompletedBtnHidden,
             clearCompleted,
-            selectedFilter,
-            changeFilter
+            selectedFilter
         } = this.props;
 
         const links = this._filterList.map(v => (
             <li key={`filter_${v}`}>
-                <a
+                <Link
                     className={ClassNames({
                         selected: selectedFilter === v
                     })}
-                    onClick = {() => changeFilter(v)}
+                    to ={ `/${v}`}
                 >
                 {/*<a className={selectedFilter === v ? 'selected' : ''}
                     onClick = {() => changeFilter(v)}
                 >*/}
 
-                    {v}
-                </a>
+                    {v ? v.replace(/^\w/, v => v.toUpperCase()): 'All'} {/* 첫글자만 대문자로 바꾸겠당 */}
+                </Link>
             </li>
         ));
         return(
