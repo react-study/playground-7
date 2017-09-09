@@ -7,7 +7,7 @@ import Footer from './Footer';
 import axios from 'axios';
 
 const ax = axios.create({
-    baseURL: 'http://localhost:2404/todos',
+    baseURL: 'http://localhost:2403/todos',
     timeout: 1000 // timeout 이 끝나면 에러를 반환한다!
 });
 
@@ -19,8 +19,8 @@ class App extends React.Component {
         super();
         this.state = {
             todos: [],
-            editingId: null,
-            selectedFilter: 'All'
+            editingId: null
+            // selectedFilter: 'All'
         };
         ax.get('/')
             .then(res => {
@@ -309,31 +309,35 @@ class App extends React.Component {
         //
     };
 
-    changeFilter = filter => {
-        this.setState({
-            selectedFilter : filter
-        })
-    };
+    // changeFilter = filter => {
+    //     this.setState({
+    //         selectedFilter : filter
+    //     })
+    // };
 
     render() {
         const {
             todos,
             editingId,
-            selectedFilter
+            // selectedFilter
         } = this.state;
+
+        const {match: {params}} = this.props;
+        const selectedFilter = params && params.filter || '';
+
 
         const completedLength = todos.filter(v => v.isDone).length;
         const activeLength = todos.length - completedLength;
 
         let filteredTodos;
         switch(selectedFilter) {
-            case 'Active':
+            case 'active':
                 filteredTodos = todos.filter(v => !v.isDone);
                 break;
-            case 'Completed':
+            case 'completed':
                 filteredTodos = todos.filter(v => v.isDone);
                 break;
-            case 'All':
+            case '':
             default:
                 filteredTodos = todos;
         }
@@ -358,8 +362,7 @@ class App extends React.Component {
                     shouldCompletedBtnHidden={!completedLength}
                     activeLength={activeLength}
                     clearCompleted={this.clearCompleted} // 메서드
-                    changeFilter={this.changeFilter} // 메서드
-                    selectedFilter={selectedFilter} // 메서드
+                    selectedFilter={selectedFilter}
                 />
             </div>
         );

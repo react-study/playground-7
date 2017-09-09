@@ -1,9 +1,10 @@
 import React from 'react';
 import ClassNames from 'classnames';
 
+import { Link } from 'react-router-dom';
 
 class Footer extends React.Component {
-    _filterList = ['All', 'Active', 'Completed'];
+    _filterList = ['', 'active', 'completed'];
 
     render() {
         const {
@@ -11,20 +12,21 @@ class Footer extends React.Component {
             activeLength,
             shouldCompletedBtnHidden,
             selectedFilter,
-            changeFilter
+            // changeFilter
         } = this.props;
 
         const links = this._filterList.map(v => (
             <li key={`filter_${v}`}>
-                <a className={
+                <Link className={
                     ClassNames({
                         selected: selectedFilter === v
                     })}
 
-                    onClick={() => changeFilter(v)}
+                    to={`/${v}`}
                 >
-                    {v}
-                </a>
+                    {v ? v.replace(/^\w/, v => v.toUpperCase()) : 'All'} 
+                    {/* 정규표현식 사용 */}
+                </Link>
             </li>
         ))
 
