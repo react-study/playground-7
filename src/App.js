@@ -18,7 +18,6 @@ class App extends React.Component {
         this.state = {
             todos: [],
             editingId: null,
-            selectedFilter: 'All'
         };
         ax.get('/')
         .then(res => {
@@ -120,36 +119,30 @@ class App extends React.Component {
         });
     }
 
-    changeFilter = filter => {
-        this.setState({
-            selectedFilter: filter
-        });
-    }
-
     render() {
         const {
             todos,
             editingId,
-            selectedFilter
         } = this.state;
+
+        const { match: { params }} = this.props;
+        const selectedFilter = params && params.filter || '';
 
         const completedLength = todos.filter(v =>v.isDone).length;
         const activeLength = todos.length - completedLength;
 
         let filteredTodos;
         switch(selectedFilter) {
-            case 'Active':
+            case 'active':
                 filteredTodos = todos.filter(v => !v.isDone);
                 break;
-            case 'Completed':
+            case 'completed':
                 filteredTodos = todos.filter(v => v.isDone);
                 break;
-            case 'All':
+            case '':
             default:
                 filteredTodos = todos;
         }
-
-        console.log('render');
 
         return (
             <div className="todo-app">
@@ -172,7 +165,6 @@ class App extends React.Component {
                     shouldCompletedBtnHidden={!completedLength}
                     clearCompleted={this.clearCompleted}
                     selectedFilter={selectedFilter}
-                    changeFilter={this.changeFilter}
                 />
             </div>
         );
