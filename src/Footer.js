@@ -24,7 +24,7 @@ class Footer extends React.Component {
 
                     to={`/${v}`}
                 >
-                    {v ? v.replace(/^\w/, v => v.toUpperCase()) : 'All'} 
+                    {v ? v.replace(/^\w/, v => v.toUpperCase()) : 'All'}
                     {/* 정규표현식 사용 */}
                 </Link>
             </li>

@@ -5,3 +5,4 @@ npm-debug.log
 db
 yarn.lock
 package-lock.json
+.idea
