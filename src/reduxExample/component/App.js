@@ -1,15 +1,20 @@
 import React, { Component} from 'react';
 import InputBox from './InputBox';
 import AccountBook from './AccountBook';
+import Tab from './Tab';
 import { connect } from 'react-redux';
 import BankAction from '../action/BankAction';
+import TabAction from '../action/TabAction';
 
 const mapStateToProps = state => ({
-    accountList: state.accountList
+    accountList: state.bank.accountList,
+    effect: state.bank.effect,
+    focused: state.tab.focused,
 });
 
 const mapDispatchToProps = dispatch => ({
-    calc: (type, money) => dispatch(BankAction[type](money))
+    calc: (type, money) => dispatch(BankAction[type](money)),
+    changeTab: index => dispatch(TabAction.changeTab(index))
     // type: 'save' or 'withdraw'
     // money: 숫자(문자열)
 
@@ -25,9 +30,13 @@ const mapDispatchToProps = dispatch => ({
 
 const App = ({
     accountList,
-    calc
+    calc,
+    focused,
+    changeTab,
+    effect
 }) => (
-    <div>
+    <div style={{backgroundColor: effect ? '#ff0' : '#fff'}}>
+        <Tab focused={focused} changeTab={changeTab} />
         <InputBox calc={calc} />
         <AccountBook accountList={accountList} />
     </div>

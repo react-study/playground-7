@@ -1,7 +1,21 @@
-const save = money => ({
-    type: 'SAVE_MONEY',
-    money
-});
+const addEffect = () => {
+    return dispatch => {
+        dispatch({ type: 'SHOW_EFFECT' });
+        setTimeout(() => {
+            dispatch({ type: 'HIDE_EFFECT' });
+        }, 500);
+    }
+}
+
+const save = money => {
+    return dispatch => {
+        dispatch({
+            type: 'SAVE_MONEY',
+            money
+        });
+        dispatch(addEffect());
+    }
+}
 
 const withdraw = money => ({
     type: 'WITHDRAW_MONEY',

@@ -32,6 +32,16 @@ const BankReducer = (prevState = initialState, action) => {
                 }]
             };
         }
+        case 'SHOW_EFFECT': {
+            return Object.assign({}, prevState, {
+                effect: true
+            })
+        }
+        case 'HIDE_EFFECT': {
+            return Object.assign({}, prevState, {
+                effect: false
+            })
+        }
         default: return prevState;
     }
 }
