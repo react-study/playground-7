@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const ax = axios.create({
     baseURL: 'http://localhost:2403/todos'
-})
+});
 
 class App extends React.Component {
 
