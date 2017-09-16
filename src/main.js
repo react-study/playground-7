@@ -22,4 +22,4 @@ import ReduxMain from './reduxExample/ReduxMain';
 render(
     <ReduxMain />,
     document.getElementById('root')
-)
+);
