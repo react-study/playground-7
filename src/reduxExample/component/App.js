@@ -2,13 +2,13 @@ import React, { Component} from 'react';
 import InputBox from './InputBox';
 import AccountBook from './AccountBook';
 import { connect } from 'react-redux';
-import BankAction from './action/BankAction'
+import BankAction from '../action/BankAction'
 
 const mapStateToProps = state => ({
     accountList: state.accountList // store로부터 accountList state 값을 받아오자
 });
 // 인자로 상태를 받음, 객체를 반환
-const mapDispatchToProps = state => ({
+const mapDispatchToProps = dispatch => ({
     // 기본적인  action
     // clac: (type, money) => dispatch({
     //     type: type, // 이름과 키가 같으면
@@ -16,7 +16,7 @@ const mapDispatchToProps = state => ({
     // }) // 이게 하나의 action 이다
 
     // action creator 를 호출해보자!
-    clac: (type, money) => dispatch(
+    calc: (type, money) => dispatch(
         BankAction[type](money)
     )
 

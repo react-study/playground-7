@@ -1,9 +1,9 @@
 const initialState = { accountList: [] };
 
-const BankReducer = (prevState, action) => {
+const BankReducer = (prevState = initialState, action) => {
     switch(action.type) {
         case 'SAVE_MONEY': {
-            const money = +action.oney;
+            const money = +action.money;
             const prevAccount = prevState.accountList;
             const lastResult = prevAccount.length
                 ? prevAccount[prevAccount.length - 1].result
@@ -19,7 +19,7 @@ const BankReducer = (prevState, action) => {
         }
 
         case 'WITHDRAW_MONEY': {
-            const money = +action.oney;
+            const money = +action.money;
             const prevAccount = prevState.accountList;
             const lastResult = prevAccount.length
                 ? prevAccount[prevAccount.length - 1].result
@@ -34,7 +34,7 @@ const BankReducer = (prevState, action) => {
             });
         }
 
-        default: return prefState;
+        default: return prevState;
     }
     // return newState;
 };
