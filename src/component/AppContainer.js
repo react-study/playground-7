@@ -24,8 +24,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class App extends React.Component {
-    componentWillMount(){
-        this.props.getTodos();
+    constructor(props) {
+        super(props);
+        props.getTodos();
     }
 
     render() {
