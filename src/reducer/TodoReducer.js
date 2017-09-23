@@ -12,10 +12,33 @@ const TodoReducer = (prevState = initialState, action) => {
                     $set: action.todos
                 }
             });
-        case 'ADD_TODO':
+        case 'ADD_TODO_REQUEST':
             return update(prevState, {
                 todos: {
                     $push: [ action.newTodo ]
+                }
+            });
+        case 'ADD_TODO_SUCCESS':
+            return update(prevState, {
+                todos: {
+                    $splice: [
+                        [
+                            prevState.todos.findIndex(v => v.id === action.tempId),
+                            1,
+                            action.newTodo
+                        ]
+                    ]
+                }
+            });
+        case 'ADD_TODO_FAILED':
+            return update(prevState, {
+                todos: {
+                    $splice: [
+                        [
+                            prevState.todos.findIndex(v => v.id === action.tempId),
+                            1
+                        ]
+                    ]
                 }
             });
         case 'DELETE_TODO':
@@ -32,7 +55,7 @@ const TodoReducer = (prevState = initialState, action) => {
                     $set: action.id
                 }
             });
-        case 'SAVE_TODO':
+        case 'SAVE_TODO_SUCCESS':
             return update(prevState, {
                 todos: {
                     [prevState.todos.findIndex(v => v.id === action.id)]: {
@@ -43,6 +66,21 @@ const TodoReducer = (prevState = initialState, action) => {
                     $set: null
                 }
             });
+        case 'SAVE_TODO_REQUEST':
+        case 'SAVE_TODO_FAILED':
+            return update(prevState, {
+                todos: {
+                    [prevState.todos.findIndex(v => v.id === action.id)]: {
+                        text: {
+                            $set: action.newText
+                        }
+                    }
+                },
+                editingId: {
+                    $set: null
+                }
+            });
+
         case 'CANCEL_EDIT':
             return update(prevState, {
                 editingId: {

@@ -15,11 +15,28 @@ const TodoAction = {
         });
     },
     addTodo: (text) => dispatch => {
+        const tempId = 'temp_' + Date.now();
+        dispatch({
+            type: 'ADD_TODO_REQUEST',
+            newTodo: {
+                id: tempId,
+                text,
+                isDone: false
+            }
+        });
+
         ax.post('/', { text })
         .then(res => {
             dispatch({
-                type: 'ADD_TODO',
+                type: 'ADD_TODO_SUCCESS',
+                tempId,
                 newTodo: res.data
+            });
+        })
+        .catch(err => {
+            dispatch({
+                type: 'ADD_TODO_FAILED',
+                tempId
             });
         });
     },
@@ -36,15 +53,29 @@ const TodoAction = {
         type: 'START_EDIT',
         id
     }),
-    saveTodo: (id, newText) => dispatch => {
+    saveTodo: (id, newText) => (dispatch, getState) => {
+        const prevText = getState().todos.find(v => v.id === id).text;
+        dispatch({
+            type: 'SAVE_TODO_REQUEST',
+            id,
+            newText
+        });
+
         ax.put(`/${id}`, { text: newText })
         .then(res => {
             dispatch({
-                type: 'SAVE_TODO',
+                type: 'SAVE_TODO_SUCCESS',
+                id,
                 editedTodo: res.data,
-                id
             });
-        });
+        })
+        .catch(err => {
+            dispatch({
+                type: 'SAVE_TODO_FAILED',
+                id,
+                newText: prevText
+            });
+        })
     },
     cancelEdit: () => ({
         type: 'CANCEL_EDIT'
